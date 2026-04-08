@@ -4,6 +4,13 @@ Korsunsky Lab — Brigham and Women's Hospital /HMS Coding Assessment
 ### Background
 The Harmony algorithm performs iterative batch correction of single-cell genomics data. At its core, each iteration involves a sequence of matrix operations — clustering assignments, regression, and centroid updates — applied to a matrix of cells × embedding dimensions. As datasets grow to tens of millions of cells, runtime becomes a bottleneck, and parallelization is essential.
 
+### Benchmark Results
+Threads | Time (s)
+--------|---------
+1       | 65.688
+4       | 18.713
+8       | 12.211
+
 ### Parallelization
 The parallelization strategy implemented here uses OpenMP. This method is simpler to use compared to other tools such as Intel TBB. The loops that needed to be parallelized were also regular for loops (low complexity) which allowed for a simpler tool to be appropriate. 
 
