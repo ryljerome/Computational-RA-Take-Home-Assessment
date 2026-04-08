@@ -12,3 +12,7 @@ It was important to consider that the two loop blocks could not be parallelized 
 Another consideration was if the cells were divided among multiple threads, then there would need to be a way to prevent them from writing to the same index in the centroids matrix because different cells could still share the same k and d iteration.
 
 This was handled by adding reduction (#pragma omp parallel for reduction(...)) to the first loop block. This gives each thread its own copy of the centroids matrix to which they can write to. Then at the end each centroid matrix across threads gets summed together. Then the second loop block is given another (#pragma omp parallel for) tag, creating a barrier that prevents this loop from executing before all previous threads are complete.
+
+### Bottlenecks/Things to do Differently
+For dimensions N = 1,000,000, K = 100, and D = 50, the vector R has a size of 100,000,000 and vector Z has a size of 50,000,000, meaning the computation probably relies on RAM as it exceeds CPU memory. So even if the number of threads is increased, the CPU memory likely runs out. 
+Additional changes could involve sanity checks throughout the program. For exmaple, checking that user input the correct variables i.e. the size of R matches the product of their input for N and K. Another example could be checking the probabilities add up to 1 for each row of R and after normalizing cluster_sums.
